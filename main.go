@@ -41,6 +41,14 @@ func generatePyramid(userInt int) [][]int {
 	return pyramid
 }
 
+func pyramidSize(pyramid [][]int) int {
+	var cells int = 0
+	for x := 0; x < len(pyramid); x++ {
+		cells += len(pyramid[x])
+	}
+	return cells
+}
+
 /*
 From number pyramids website [https://nrich.maths.org/numberpyramids]
 var epsilon = 0.00000001
@@ -74,4 +82,5 @@ func main() {
 	pyramid := generatePyramid(userInt)
 
 	fmt.Println("pyramid", pyramid)
+	fmt.Println("pyramid size", pyramidSize(pyramid))
 }
