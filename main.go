@@ -30,9 +30,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	//TODO: make this OS agnostic
 	text = strings.Replace(text, "\n", "", -1)
 	text = strings.Replace(text, "\r", "", -1)
-	//fmt.Println(text)
 
 	userInt64, err := strconv.ParseInt(text, 10, 0)
 	if err != nil {
@@ -43,9 +43,9 @@ func main() {
 	currentPyramid := pyramid.Pyramid{}
 	currentPyramid.GeneratePyramid(userInt)
 
-	fmt.Println("pyramid", currentPyramid)
-	fmt.Println("pyramid size", currentPyramid.PyramidSize())
-	//fmt.Println("pyramid hidden", generateHiddenCells(&pyramid, userInt))
+	fmt.Println("pyramid", currentPyramid.Pyramid)
+	//fmt.Println("pyramid size", currentPyramid.PyramidSize())
+	fmt.Println("pyramid hidden", currentPyramid.HiddenRows)
 
 	//http.HandleFunc("/", handler)
 	//log.Fatal(http.ListenAndServe(":8080", nil))

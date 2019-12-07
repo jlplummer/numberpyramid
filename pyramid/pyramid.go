@@ -1,14 +1,15 @@
 package pyramid
 
+//TODO: Generate documentation
+
 import (
-	"fmt"
 	"math/rand"
 	"time"
 )
 
 type Pyramid struct {
-	pyramid    [][]int
-	hiddenRows [][]int
+	Pyramid    [][]int
+	HiddenRows [][]int
 }
 
 func (p *Pyramid) GeneratePyramid(userInt int) *Pyramid {
@@ -18,16 +19,16 @@ func (p *Pyramid) GeneratePyramid(userInt int) *Pyramid {
 		[2] = [23, 35]
 		[3] = [58]
 	*/
-	p.pyramid = populateCells(userInt)
-	p.hiddenRows = determineHidden(p.pyramid, p.PyramidSize())
+	p.populateCells(userInt)
+	p.determineHidden(userInt)
 	return p
 }
 
 func (p *Pyramid) PyramidSize() int {
 	var cells int = 0
-	for x := 0; x < len((p.pyramid)); x++ {
+	for x := 0; x < len((p.Pyramid)); x++ {
 		// de-reference the pyramid, then get the slice
-		cells += len((p.pyramid)[x])
+		cells += len((p.Pyramid)[x])
 	}
 	return cells
 }
@@ -36,7 +37,7 @@ func pyramidCell(a, b int) int {
 	return a + b
 }
 
-func populateCells(userInt int) [][]int {
+func (p *Pyramid) populateCells(userInt int) {
 	pyramid := make([][]int, userInt)
 	for x := 0; x < userInt; x++ {
 		innerLen := userInt
@@ -53,30 +54,41 @@ func populateCells(userInt int) [][]int {
 			}
 		}
 	}
-	return pyramid
+	p.Pyramid = pyramid
 }
 
-//TODO: figure out syntax to pass pyramid in as a reference instead of a copy
-func determineHidden(pyramid [][]int, pyramidLength int) [][]int {
-	var hiddenPyramid = make([][]int, pyramidLength)
-	var hiddenPerRow = make([]int, pyramidLength)
+func (p *Pyramid) determineHidden(userInt int) {
+	//TODO: this actually isn't determining hidden... it's determining what to show. fix names
 
-	// instead of randomly hiding for each row...
-	// randomly decide if row one has any visible cells and then go from there?
-	// randomly decide if current cell's neighbor (up or left or right or down) is populated
-	//       break/continue once you do something on a given row
+	pattern4 := [][]int{{0, 6, 9}, {3, 6, 8}}
+	pattern5 := [][]int{{0, 1, 7, 9}, {3, 4, 6, 11}}
 
-	fmt.Println("hiddenPerRow[]", hiddenPerRow)
+	rand.Seed(time.Now().UnixNano())
+	patternToUse := rand.Intn(2)
 
-	// if the cell is -1, it's "hidden"
-	for j, g := range pyramid {
-		// g = slice of pyramid[j] at this point
-		hiddenPyramid[j] = make([]int, len(g))
+	var pattern []int
 
+	switch userInt {
+	case 4:
+		pattern = pattern4[patternToUse]
+	case 5:
+		pattern = pattern5[patternToUse]
+	}
+
+	hiddenRows := make([][]int, userInt)
+	cntr := 0
+
+	// if the cell is 1, it's "shown"
+	for j, g := range p.Pyramid {
+		hiddenRows[j] = make([]int, len(g))
 		for a, _ := range g {
-			//fmt.Println("j,g,a", j, g, a)
-			hiddenPyramid[j][a] = -1
+			for _, l := range pattern {
+				if l == cntr {
+					hiddenRows[j][a] = 1
+				}
+			}
+			cntr++
 		}
 	}
-	return hiddenPyramid
+	p.HiddenRows = hiddenRows
 }
