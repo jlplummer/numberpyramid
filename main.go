@@ -4,42 +4,10 @@ import (
 	"bufio"
 	"fmt"
 	"jlplummer/numberpyramid/pyramid"
-	"math/rand"
 	"os"
 	"strconv"
 	"strings"
-	"time"
 )
-
-//var pyramid = make([][]int, 5)
-
-func generateHiddenCells(pyramid *[][]int, pyramidLength int) [][]int {
-	var hiddenPyramid = make([][]int, pyramidLength)
-	var hiddenPerRow = make([]int, pyramidLength)
-
-	// instead of randomly hiding for each row...
-	// randomly decide if row one has any visible cells and then go from there?
-	// randomly decide if current cell's neighbor (up or left or right or down) is populated
-	//       break/continue once you do something on a given row
-	for g := 0; g < pyramidLength; g++ {
-		rand.Seed(time.Now().UnixNano())
-		hiddenPerRow[g] = rand.Intn(len((*pyramid)[g]))
-	}
-
-	fmt.Println("hiddenPerRow[]", hiddenPerRow)
-
-	// if the cell is -1, it's "hidden"
-	for j, g := range *pyramid {
-		// g = slice of pyramid[j] at this point
-		hiddenPyramid[j] = make([]int, len(g))
-
-		for a, _ := range g {
-			//fmt.Println("j,g,a", j, g, a)
-			hiddenPyramid[j][a] = -1
-		}
-	}
-	return hiddenPyramid
-}
 
 /*
 func handler(w http.ResponseWriter, r *http.Request) {
