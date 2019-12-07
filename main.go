@@ -3,56 +3,15 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
+	"jlplummer/numberpyramid/pyramid"
 	"math/rand"
-	"net/http"
 	"os"
 	"strconv"
 	"strings"
 	"time"
 )
 
-var pyramid = make([][]int, 5)
-
-func pyramidCell(a, b int) int {
-	return a + b
-}
-
-func generatePyramid(userInt int) [][]int {
-	/*
-		[0] = [3, 5, 10, 10]
-		[1] = [8, 15, 20]
-		[2] = [23, 35]
-		[3] = [58]
-	*/
-	//pyramid := make([][]int, userInt)
-	for x := 0; x < userInt; x++ {
-		innerLen := userInt
-		pyramid[x] = make([]int, (innerLen - x))
-		for j := 0; j < len(pyramid[x]); j++ {
-			if x == 0 {
-				rand.Seed(time.Now().UnixNano())
-				pyramid[x][j] = rand.Intn(100)
-				time.Sleep(100 * time.Millisecond)
-			} else {
-				firstNum := pyramid[x-1][j]
-				secondNum := pyramid[x-1][j+1]
-				pyramid[x][j] = pyramidCell(firstNum, secondNum)
-			}
-		}
-	}
-
-	return pyramid
-}
-
-func pyramidSize(pyramid *[][]int) int {
-	var cells int = 0
-	for x := 0; x < len((*pyramid)); x++ {
-		// de-reference the pyramid, then get the slice
-		cells += len((*pyramid)[x])
-	}
-	return cells
-}
+//var pyramid = make([][]int, 5)
 
 func generateHiddenCells(pyramid *[][]int, pyramidLength int) [][]int {
 	var hiddenPyramid = make([][]int, pyramidLength)
@@ -82,6 +41,7 @@ func generateHiddenCells(pyramid *[][]int, pyramidLength int) [][]int {
 	return hiddenPyramid
 }
 
+/*
 func handler(w http.ResponseWriter, r *http.Request) {
 	pyramidString := []string{}
 	for j := range pyramid {
@@ -93,6 +53,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	//fmt.Println("pyramidString", pyramidString)
 	//fmt.Println("pyramid", pyramid)
 }
+*/
 
 func main() {
 	reader := bufio.NewReader(os.Stdin)
@@ -111,12 +72,13 @@ func main() {
 	}
 
 	var userInt int = int(userInt64)
-	pyramid := generatePyramid(userInt)
+	currentPyramid := pyramid.Pyramid{}
+	currentPyramid.GeneratePyramid(userInt)
 
-	fmt.Println("pyramid", pyramid)
-	//fmt.Println("pyramid size", pyramidSize(&pyramid))
-	fmt.Println("pyramid hidden", generateHiddenCells(&pyramid, userInt))
+	fmt.Println("pyramid", currentPyramid)
+	fmt.Println("pyramid size", currentPyramid.PyramidSize())
+	//fmt.Println("pyramid hidden", generateHiddenCells(&pyramid, userInt))
 
-	http.HandleFunc("/", handler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	//http.HandleFunc("/", handler)
+	//log.Fatal(http.ListenAndServe(":8080", nil))
 }
