@@ -60,7 +60,7 @@ func (p *Pyramid) populateCells(userInt int) {
 func (p *Pyramid) determineHidden(userInt int) {
 	//TODO: this actually isn't determining hidden... it's determining what to show. fix names
 
-	pattern4 := [][]int{{0, 6, 9}, {3, 6, 8}}
+	pattern4 := [][]int{{0, 6, 9}, {3, 6, 8}} //TODO: this won't work actually... see notebook
 	pattern5 := [][]int{{0, 1, 7, 9}, {3, 4, 6, 11}}
 
 	rand.Seed(time.Now().UnixNano())
