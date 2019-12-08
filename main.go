@@ -3,26 +3,16 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"html/template"
 	"jlplummer/numberpyramid/pyramid"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
+	"text/template"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	/*pyramidString := []string{}
-	for j := range pyramid {
-		for g := range pyramid[j] {
-			pyramidString = append(pyramidString, strconv.Itoa(pyramid[j][g]))
-		}
-	}
-	fmt.Fprintf(w, strings.Join(pyramidString, " "), r.URL.Path)*/
-	//fmt.Println("pyramidString", pyramidString)
-	//fmt.Println("pyramid", pyramid)
-
 	t, _ := template.ParseFiles("web/pyramid-template.html")
 	t.Execute(w, currentPyramid)
 }
@@ -51,6 +41,7 @@ func main() {
 	fmt.Println("pyramid", currentPyramid.Pyramid)
 	//fmt.Println("pyramid size", currentPyramid.PyramidSize())
 	fmt.Println("pyramid hidden", currentPyramid.HiddenRows)
+	fmt.Println("pyramid reversed", currentPyramid.ReversePyramid)
 
 	http.HandleFunc("/", handler)
 	log.Fatal(http.ListenAndServe(":8080", nil))

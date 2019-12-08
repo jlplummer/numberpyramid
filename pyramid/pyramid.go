@@ -8,8 +8,9 @@ import (
 )
 
 type Pyramid struct {
-	Pyramid    [][]int
-	HiddenRows [][]int
+	Pyramid        [][]int
+	HiddenRows     [][]int
+	ReversePyramid [][]int
 }
 
 func (p *Pyramid) GeneratePyramid(userInt int) *Pyramid {
@@ -21,7 +22,22 @@ func (p *Pyramid) GeneratePyramid(userInt int) *Pyramid {
 	*/
 	p.populateCells(userInt)
 	p.determineHidden(userInt)
+	p.reversePyramid(userInt)
 	return p
+}
+
+func (p *Pyramid) reversePyramid(userInt int) {
+	reversedPyramid := make([][]int, userInt)
+	newIndex := 0
+	for j := (userInt - 1); j >= 0; j-- {
+		//fmt.Println("j", j, "newIndex", newIndex)
+		//fmt.Println("p.pyramid[j]", p.Pyramid[j])
+		reversedPyramid[newIndex] = make([]int, len(p.Pyramid[j]))
+		reversedPyramid[newIndex] = p.Pyramid[j]
+		//fmt.Println("reversedPyramid", reversedPyramid)
+		newIndex++
+	}
+	p.ReversePyramid = reversedPyramid
 }
 
 func (p *Pyramid) PyramidSize() int {
