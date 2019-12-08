@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <!-- <link rel="stylesheet" type="text/css" href="web/pyramid.css"> -->
+
+        <style>
+            .wrapper {
+                text-align: center;
+            }
+
+            .solid {
+                border-style: solid;
+                width: 100px;
+                height: 50px;
+                display: inline-table;
+                position: relative;
+                margin-bottom: 10px;
+                align-content:center;
+            }
+        </style>
+
+        <script src="web/pyramid.js"></script>
+        <title>Numbers Pyramid</title>
+    </head>
+
+    <body>
+        <div class="wrapper">
+            {{ range $key, $value := .ReversePyramid }}
+                {{ range $key2, $value2 := . }}
+                        <!--
+                        key = {{ $key }}
+                        key2 = {{ $key2 }}
+                        value = {{ $value }}
+                        value2 = {{ $value2 }} -->
+                    <div class="solid" id="">
+                        {{ $value2 }}
+                    </div>
+                {{ end }}
+                <br clear="all" />
+            {{ end }}
+        </div>
+    </body>
+</html>
