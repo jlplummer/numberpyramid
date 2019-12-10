@@ -11,6 +11,7 @@ type Pyramid struct {
 	Pyramid        [][]int
 	HiddenRows     [][]int
 	ReversePyramid [][]int
+	PyramidData    map[int]map[string]int
 }
 
 func (p *Pyramid) GeneratePyramid(userInt int) *Pyramid {
@@ -23,7 +24,22 @@ func (p *Pyramid) GeneratePyramid(userInt int) *Pyramid {
 	p.populateCells(userInt)
 	p.determineHidden(userInt)
 	p.reversePyramid(userInt)
+	p.populatePyramidData(userInt)
+	//fmt.Println("PyramidData", p.PyramidData)
 	return p
+}
+
+func (p *Pyramid) populatePyramidData(userInt int) {
+	pd := make(map[int]map[string]int)
+	var cellId int = 0
+	for j := 0; j < userInt; j++ {
+		for g := 0; g < len(p.Pyramid[j]); g++ {
+			pd[cellId] = map[string]int{"cellId": cellId, "cellValue": p.Pyramid[j][g], "cellHidden": p.HiddenRows[j][g]}
+			cellId++
+		}
+	}
+
+	p.PyramidData = pd
 }
 
 func (p *Pyramid) reversePyramid(userInt int) {
