@@ -18,36 +18,39 @@
             }
         </style>
 
-        <script src="web/pyramid.js"></script>
+        <script>
+            function hideContents() {
+                var x = document.getElementsByName("notShown");
+                var i;
+                for (i = 0; i < x.length; i++) {
+                    x[i].style.display = "none";
+                }
+            }
+        </script>
         <title>Numbers Pyramid</title>
     </head>
 
-    <body>
-        
-        <div class="wrapper">
-            {{ range $key, $value := .ReversePyramid }}
-                {{ range $key2, $value2 := . }}
-                    <div class="solid" id="">
-                        {{ $value2 }}
-                    </div>
-                {{ end }}
-                <br clear="all" />
-            {{ end }}
-        </div>
-
-        <br clear="all" />
-        
+    <body onLoad="hideContents()">
         <div class="wrapper">
             {{ range $key, $value := .ReversePyramidData }}
                 {{ if $value.cellBreak }}
-                <br clear="all" />
+                    <br clear="all" />
                 {{ else }}
                     
-                    <div class="solid" id="{{ $value.cellId }}">
-                    CellId: {{ $value.cellId }}
-                    CellHidden: {{ $value.cellHidden }}
-                    CellValue: {{ $value.cellValue }}
-                    CellBreak: {{ $value.cellBreak }}
+                <div class="solid" id="{{ $value.cellId }}">
+                <!--
+                CellId: {{ $value.cellId }}
+                CellHidden: {{ $value.cellHidden }}
+                CellValue: {{ $value.cellValue }}
+                CellBreak: {{ $value.cellBreak }}
+                -->
+                    {{ if $value.cellHidden }}
+                        <p name="shown">
+                    {{ else }}
+                        <p name="notShown">
+                    {{end}}
+                        {{ $value.cellValue}}
+                    </p>
                 </div>
                 {{ end}}
             {{ end }}

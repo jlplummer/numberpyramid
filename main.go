@@ -24,7 +24,13 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, currentPyramid)
 }
 
+func icoHandler(w http.ResponseWriter, r *http.Request) {
+	//w.Header().Set("Content-type", "text/plain; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+}
+
 func main() {
 	http.HandleFunc("/", handler)
+	http.HandleFunc("/favicon.ico", icoHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
