@@ -23,6 +23,7 @@
     </head>
 
     <body>
+        
         <div class="wrapper">
             {{ range $key, $value := .ReversePyramid }}
                 {{ range $key2, $value2 := . }}
@@ -33,5 +34,24 @@
                 <br clear="all" />
             {{ end }}
         </div>
+
+        <br clear="all" />
+        
+        <div class="wrapper">
+            {{ range $key, $value := .ReversePyramidData }}
+                {{ if $value.cellBreak }}
+                <br clear="all" />
+                {{ else }}
+                    
+                    <div class="solid" id="{{ $value.cellId }}">
+                    CellId: {{ $value.cellId }}
+                    CellHidden: {{ $value.cellHidden }}
+                    CellValue: {{ $value.cellValue }}
+                    CellBreak: {{ $value.cellBreak }}
+                </div>
+                {{ end}}
+            {{ end }}
+            <br clear="all" />
+    </div>
     </body>
 </html>

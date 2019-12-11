@@ -8,10 +8,12 @@ import (
 )
 
 type Pyramid struct {
-	Pyramid        [][]int
-	HiddenRows     [][]int
-	ReversePyramid [][]int
-	PyramidData    map[int]map[string]int
+	Pyramid            [][]int
+	HiddenRows         [][]int
+	ReversePyramid     [][]int
+	ReversedHiddenRows [][]int
+	PyramidData        map[int]map[string]int
+	ReversePyramidData map[int]map[string]int
 }
 
 func (p *Pyramid) GeneratePyramid(userInt int) *Pyramid {
@@ -24,22 +26,41 @@ func (p *Pyramid) GeneratePyramid(userInt int) *Pyramid {
 	p.populateCells(userInt)
 	p.determineHidden(userInt)
 	p.reversePyramid(userInt)
+	p.reverseHidden(userInt)
 	p.populatePyramidData(userInt)
+	p.reversePyramidData(userInt)
 	//fmt.Println("PyramidData", p.PyramidData)
 	return p
 }
 
+// TODO: This needs to build in reverse like reversePyramid() to work with the CSS you have
 func (p *Pyramid) populatePyramidData(userInt int) {
 	pd := make(map[int]map[string]int)
 	var cellId int = 0
 	for j := 0; j < userInt; j++ {
 		for g := 0; g < len(p.Pyramid[j]); g++ {
-			pd[cellId] = map[string]int{"cellId": cellId, "cellValue": p.Pyramid[j][g], "cellHidden": p.HiddenRows[j][g]}
+			pd[cellId] = map[string]int{"cellId": cellId, "cellValue": p.Pyramid[j][g], "cellHidden": p.HiddenRows[j][g], "cellBreak": 0}
 			cellId++
 		}
+		pd[cellId] = map[string]int{"cellId": cellId, "cellValue": 0, "cellHidden": 0, "cellBreak": 1}
+		cellId++
 	}
 
 	p.PyramidData = pd
+}
+
+func (p *Pyramid) reversePyramidData(userInt int) {
+	rpd := make(map[int]map[string]int)
+	cellId := 0
+	for j := 0; j < userInt; j++ {
+		for g := 0; g < len(p.ReversePyramid[j]); g++ {
+			rpd[cellId] = map[string]int{"cellId": cellId, "cellValue": p.ReversePyramid[j][g], "cellHidden": p.ReversedHiddenRows[j][g], "cellBreak": 0}
+			cellId++
+		}
+		rpd[cellId] = map[string]int{"cellId": cellId, "cellValue": 0, "cellHidden": 0, "cellBreak": 1}
+		cellId++
+	}
+	p.ReversePyramidData = rpd
 }
 
 func (p *Pyramid) reversePyramid(userInt int) {
@@ -54,6 +75,17 @@ func (p *Pyramid) reversePyramid(userInt int) {
 		newIndex++
 	}
 	p.ReversePyramid = reversedPyramid
+}
+
+func (p *Pyramid) reverseHidden(userInt int) {
+	rh := make([][]int, userInt)
+	newIndex := 0
+	for j := (userInt - 1); j >= 0; j-- {
+		rh[newIndex] = make([]int, len(p.HiddenRows[j]))
+		rh[newIndex] = p.HiddenRows[j]
+		newIndex++
+	}
+	p.ReversedHiddenRows = rh
 }
 
 func (p *Pyramid) PyramidSize() int {
@@ -93,7 +125,7 @@ func (p *Pyramid) determineHidden(userInt int) {
 	//TODO: this actually isn't determining hidden... it's determining what to show. fix names
 
 	pattern4 := [][]int{{0, 6, 9}, {3, 6, 8}} //TODO: this won't work actually... see notebook
-	pattern5 := [][]int{{0, 1, 7, 9}, {3, 4, 6, 11}}
+	pattern5 := [][]int{{0, 1, 7, 9, 11}, {3, 4, 6, 9, 11}}
 
 	rand.Seed(time.Now().UnixNano())
 	patternToUse := rand.Intn(2)
