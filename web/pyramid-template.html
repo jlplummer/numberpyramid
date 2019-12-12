@@ -23,7 +23,15 @@
                 var x = document.getElementsByName("notShown");
                 var i;
                 for (i = 0; i < x.length; i++) {
-                    x[i].style.display = "none";
+                    x[i].style.color = "white";
+                }
+            }
+
+            function showAnswers() {
+                var x = document.getElementsByName("notShown");
+                var i;
+                for (i = 0; i < x.length; i++) {
+                    x[i].style.color = "black";
                 }
             }
         </script>
@@ -55,6 +63,7 @@
                 {{ end}}
             {{ end }}
             <br clear="all" />
+            <input type="button" name="show" onclick="showAnswers()" value="Show Answers"/>
     </div>
     </body>
 </html>
