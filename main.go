@@ -1,7 +1,7 @@
+//numberpyramid presents a pyramid math problem via http to a browser
 package main
 
 import (
-	"fmt"
 	"jlplummer/numberpyramid/pyramid"
 	"log"
 	"net/http"
@@ -15,17 +15,11 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	currentPyramid.GeneratePyramid(userInt)
 
-	fmt.Println("pyramid", currentPyramid.Pyramid)
-	//fmt.Println("pyramid size", currentPyramid.PyramidSize())
-	fmt.Println("pyramid hidden", currentPyramid.HiddenRows)
-	fmt.Println("pyramid reversed", currentPyramid.ReversePyramid)
-
 	t, _ := template.ParseFiles("web/pyramid-template.html")
 	t.Execute(w, currentPyramid)
 }
 
 func icoHandler(w http.ResponseWriter, r *http.Request) {
-	//w.Header().Set("Content-type", "text/plain; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 }
 

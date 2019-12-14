@@ -1,14 +1,23 @@
+// Package generates a pyramid number structure, including data for only
+// showing necessary numbers to solve the math problem.
+//
+// Pyramid Structure stored in top-down map
+//            [0]
+//          [1]  [2]
+//        [3]  [4]  [5]
+//     [6]  [7]  [8]  [9]
+//  [10] [11] [12] [13] [14]
 package pyramid
 
-//TODO: Generate documentation
-
 import (
+	"fmt"
 	"math/rand"
 	"time"
 )
 
 type Pyramid struct {
 	Pyramid            [][]int
+	Pyramid2           [][]int
 	HiddenRows         [][]int
 	ReversePyramid     [][]int
 	ReversedHiddenRows [][]int
@@ -17,23 +26,17 @@ type Pyramid struct {
 }
 
 func (p *Pyramid) GeneratePyramid(userInt int) *Pyramid {
-	/*
-		[0] = [3, 5, 10, 10]
-		[1] = [8, 15, 20]
-		[2] = [23, 35]
-		[3] = [58]
-	*/
 	p.populateCells(userInt)
 	p.determineHidden(userInt)
 	p.reversePyramid(userInt)
 	p.reverseHidden(userInt)
 	p.populatePyramidData(userInt)
 	p.reversePyramidData(userInt)
-	//fmt.Println("PyramidData", p.PyramidData)
+	p.populateCellsReverse(userInt)
+	fmt.Println("pyramid2", p.Pyramid2)
 	return p
 }
 
-// TODO: This needs to build in reverse like reversePyramid() to work with the CSS you have
 func (p *Pyramid) populatePyramidData(userInt int) {
 	pd := make(map[int]map[string]int)
 	var cellId int = 0
@@ -67,11 +70,8 @@ func (p *Pyramid) reversePyramid(userInt int) {
 	reversedPyramid := make([][]int, userInt)
 	newIndex := 0
 	for j := (userInt - 1); j >= 0; j-- {
-		//fmt.Println("j", j, "newIndex", newIndex)
-		//fmt.Println("p.pyramid[j]", p.Pyramid[j])
 		reversedPyramid[newIndex] = make([]int, len(p.Pyramid[j]))
 		reversedPyramid[newIndex] = p.Pyramid[j]
-		//fmt.Println("reversedPyramid", reversedPyramid)
 		newIndex++
 	}
 	p.ReversePyramid = reversedPyramid
@@ -91,7 +91,6 @@ func (p *Pyramid) reverseHidden(userInt int) {
 func (p *Pyramid) PyramidSize() int {
 	var cells int = 0
 	for x := 0; x < len((p.Pyramid)); x++ {
-		// de-reference the pyramid, then get the slice
 		cells += len((p.Pyramid)[x])
 	}
 	return cells
@@ -119,6 +118,30 @@ func (p *Pyramid) populateCells(userInt int) {
 		}
 	}
 	p.Pyramid = pyramid
+}
+
+func (p *Pyramid) populateCellsReverse(userInt int) {
+	pyramid := make([][]int, userInt)
+	cntr := 0
+	for x := (userInt - 1); x >= 0; x-- {
+		innerLen := userInt
+		pyramid[x] = make([]int, (innerLen - cntr))
+		cntr++
+
+		for j := 0; j < len(pyramid[x]); j++ {
+			fmt.Println("xj", x, j)
+			if x == (userInt - 1) {
+				rand.Seed(time.Now().UnixNano())
+				pyramid[x][j] = rand.Intn(100)
+				time.Sleep(100 * time.Millisecond)
+			} else {
+				firstNum := pyramid[x+1][j]
+				secondNum := pyramid[x+1][j+1]
+				pyramid[x][j] = pyramidCell(firstNum, secondNum)
+			}
+		}
+	}
+	p.Pyramid2 = pyramid
 }
 
 func (p *Pyramid) determineHidden(userInt int) {
