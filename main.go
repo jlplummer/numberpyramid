@@ -2,10 +2,11 @@
 package main
 
 import (
-	"jlplummer/numberpyramid/pyramid"
 	"log"
 	"net/http"
 	"text/template"
+
+	"github.com/jlplummer/numberpyramid/pyramid"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
